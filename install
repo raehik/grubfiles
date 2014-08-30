@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+#
+# Install files.
+#
+
+usage() {
+    cat <<EOF
+Usage: ${0##*/}
+
+  Options:
+    -h              display this help message
+EOF
+}
+
+while getopts "h" opt; do
+    case $opt in
+        h) # display usage message
+            usage
+            exit 0
+            ;;
+    esac
+done
+
+cd "$(dirname "$0")"
+
+cp -vR $(find etc -mindepth 1 -maxdepth 1) "/etc"
+cp -vR $(find boot -mindepth 1 -maxdepth 1) "/boot"
+
+echo "(btw, if you don't have os-prober installed, I suggest you go ahead and"
+echo "install it now. pacman -S os-prober would get you it on Arch!)"

@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+#
+# Convert an image so it is suitable for use as a GRUB background image.
+# (i.e. resizes to screen resolution, makes darker so you can text on top)
+#
+# Requires ImageMagick and OptiPNG.
+#
+
+# It seems like this general rule applies for 'nice' colour and brightness:
+#   brightness=x
+#   contrast=x-10
+#
+# Here are some settings I use:
+#
+# Setting 1
+#brightness=-44
+#contrast=-54
+#echo "Setting 1 (default): brightness = -44, contrast = -54"
+#
+# If setting 1 made the GRUB menu a little unreadable, use this darker one.
+#
+# Setting 2
+#brightness=-54
+#contrast=-64
+#echo "Setting 2 (dark): brightness = -54, contrast = -64"
+#
+# If, on the other hand, you need a brighter image:
+#
+# Setting 3
+#brightness=-34
+#contrast=-44
+#echo "Setting 3 (bright): brightness = -34, contrast = -44"
+#
+
+# Set screen resolution (images will be cropped and resized to this, keeping
+# their aspect ratio)
+w=1024
+h=768
+
+# Setting 3
+setting="3 (bright)"
+brightness=-34
+contrast=-44
+echo "Setting $setting: brightness = $brightness, contrast = $contrast"
+
+# Substitution bit strips the extension, then we put a different one on.
+# e.g. 'test.jpg' -> 'test-grub.png'
+outfile="${1%.*}-grub.png"
+
+echo "Converting..."
+convert "$1" -brightness-contrast "${brightness}x${contrast}" -resize "${w}x${h}^" -gravity center -crop "${w}x${h}+0+0" "$outfile"
+echo "...done."
+
+echo "Optimizing..."
+optipng "$outfile"
+echo "...done."

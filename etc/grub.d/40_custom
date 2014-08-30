@@ -1,0 +1,36 @@
+#!/bin/sh
+#exec tail -n +4 $0
+
+# If the `exec tail...` line is uncommented, you need to specify the shell in
+# the shebang. With that line, you don't need to worry about using `cat <<EOF`
+# all over the place, though it also reduces possibilites of doing other clever
+# things as in the other *_ files.
+#
+# This file is meant to provide an easy way to add custom menu entries, but I
+# use it for other things too, like checking whether shift is held down.
+
+cat <<EOF
+# If holding down shift, alwaus bring up menu
+if keystatus --shift; then
+    set timeout=-1
+fi
+
+
+menuentry 'Show help' {
+    # what about setting root?
+    # Use a 'more' pager so we can actually read the file
+    set pager=1
+    cat /grub/notes.md
+    # Unset pager, because otherwise it interferes with echo commands when
+    # actually booting (gotta hit Space or Enter or w/e for each line)
+    set pager=0
+}
+
+menuentry 'Restart' {
+    reboot
+}
+
+menuentry 'Poweroff' {
+    halt
+}
+EOF
