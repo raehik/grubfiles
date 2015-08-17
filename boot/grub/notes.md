@@ -1,8 +1,9 @@
-06/07/14
-raehik
+last updated 2015-08-17
+by raehik
 
 
-# Notes on these notes
+Notes on these notes
+====================
 
 This file is meant to provide useful tips on booting and using GRUB. It covers
 lots of different things, from convenient menu entries to background images
@@ -11,7 +12,8 @@ All of these configurations should already be in my own GRUB config files, but
 having more info here doesn't hurt.
 
 
-## Show these notes in GRUB
+Show these notes in GRUB
+========================
 
 There should be a menu entry already which you can hit Enter on and see this
 file's contents. Perhaps that's the case right now! Otherwise, add this entry
@@ -22,20 +24,22 @@ to your `40_custom`:
     }
 
 
-# Easy shutdown/reboot
+Easy shutdown/reboot
+====================
 
 Chuck these entries into your `40_custom` file (preferably the end)
 
     menuentry 'Restart' {
         halt
     }
-    
+
     menuentry 'Poweroff' {
         reboot
     }
 
 
-# Hide GRUB unless a key is held down
+Hide GRUB unless a key is held down
+===================================
 
 According to some sources, the GRUB menu should stay up regardless of the value
 of `GRUB_TIMEOUT` if you hold down shift while GRUB starts. However, this
@@ -51,9 +55,11 @@ doesn't, then there is no change in behaviour. Here is the code (put in
     fi
 
 
-# Manual booting
+Manual booting
+==============
 
-## *nixes
+\*nixes
+-------
 
 First, check the drives and partitions on offer:
 (talk about setting by UUID instead, much better!!)
@@ -67,7 +73,8 @@ etc
     initrd /boot/initrd.img
 
 
-## Windows
+Windows
+-------
 
 To boot Windows with GRUB, you've gotta chainload Microsoft's bootloader.
 Perhaps surprisingly, that's probably easier done than said.
