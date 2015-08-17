@@ -6,51 +6,96 @@
 # Requires ImageMagick and OptiPNG.
 #
 
-# It seems like this general rule applies for 'nice' colour and brightness:
-#   brightness=x
-#   contrast=x-10
+# For an appropriately dark but still 'nice' image, I use this rule for
+# brightness and contrast:
 #
-# Here are some settings I use:
+#     brightness=x
+#     contrast=x-10
 #
-# Setting 1
-#brightness=-44
-#contrast=-54
-#echo "Setting 1 (default): brightness = -44, contrast = -54"
+# Example settings follow.
 #
-# If setting 1 made the GRUB menu a little unreadable, use this darker one.
+# Bright:
 #
-# Setting 2
-#brightness=-54
-#contrast=-64
-#echo "Setting 2 (dark): brightness = -54, contrast = -64"
+#     brightness=-44
+#     contrast=-54
 #
-# If, on the other hand, you need a brighter image:
+# Middle:
 #
-# Setting 3
-#brightness=-34
-#contrast=-44
-#echo "Setting 3 (bright): brightness = -34, contrast = -44"
+#     brightness=-54
+#     contrast=-64
+#
+# Dark:
+#
+#     brightness=-84
+#     contrast=-94
 #
 
-# Set screen resolution (images will be cropped and resized to this, keeping
-# their aspect ratio)
-w=1024
+usage() {
+    cat <<EOF
+Usage: ${0##*/} [options] file
+Convert an image to use as a background/wallpaper.
+
+  Options:
+    -w
+    -v
+    -b
+    -c
+    -h
+EOF
+}
+
+# default options
+## screen resolution
+## images will be cropped and resized to this, but will keep their
+## aspect ratio
+w=1366
 h=768
 
-# Setting 3
-setting="3 (bright)"
-brightness=-34
-contrast=-44
-echo "Setting $setting: brightness = $brightness, contrast = $contrast"
+## brightness & contrast
+b=-81
+c=-91
 
-# Substitution bit strips the extension, then we put a different one on.
-# e.g. 'test.jpg' -> 'test-grub.png'
-outfile="${1%.*}-grub.png"
 
-echo "Converting..."
-convert "$1" -brightness-contrast "${brightness}x${contrast}" -resize "${w}x${h}^" -gravity center -crop "${w}x${h}+0+0" "$outfile"
-echo "...done."
 
-echo "Optimizing..."
-optipng "$outfile"
-echo "...done."
+while getopts "b:c:w:v:h" opt; do
+    case "$opt" in
+        b) # brightness
+            b="$OPTARG"
+            ;;
+        c) # contrast
+            c="$OPTARG"
+            ;;
+        w) # width
+            w="$OPTARG"
+            ;;
+        v) # height (vertical, since -h used for help)
+            h="$OPTARG"
+            ;;
+        h) # display usage message
+            usage
+            exit 0
+            ;;
+    esac
+done
+
+shift $((OPTIND-1))
+
+
+
+if [[ $# -ne 2 ]]; then
+    echo "${0##*/}: error: not exactly 2 arguments"
+    exit 1
+fi
+
+if [[ ! -f "$1" ]]; then
+    echo "${0##*/}: error: argument 1 not a regular file"
+    exit 2
+fi
+
+
+
+if [[ $w == 0 ]] || [[ $h == 0 ]]; then
+    convert "$1" -brightness-contrast "${b}x${c}" "$2"
+else
+    convert "$1" -brightness-contrast "${b}x${c}" -resize "${w}x${h}^" -gravity center -crop "${w}x${h}+0+0" "$2"
+fi
