@@ -7,7 +7,8 @@ GRUB_CMDLINE_LINUX=""
 
 # Preload both GPT and MBR modules so that they are not missed
 # Preload lvm because os-prober won't work with Arch installs otherwise
-GRUB_PRELOAD_MODULES="part_gpt part_msdos lvm"
+# Preload png to suppport background images
+GRUB_PRELOAD_MODULES="part_gpt part_msdos lvm png"
 
 # Uncomment to enable Hidden Menu, and optionally hide the timeout count
 #GRUB_HIDDEN_TIMEOUT=5
@@ -50,4 +51,6 @@ GRUB_DISABLE_RECOVERY=true
 #GRUB_SAVEDEFAULT="true"
 
 # Show a custom background image
+# Grub requires that the extension matches the filetype, so I'm sticking
+# with png for now
 GRUB_BACKGROUND="/boot/grub/background-image.png"
