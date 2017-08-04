@@ -1,56 +1,50 @@
+# the Nth entry, or ID (in more complex setups), to initially select
 GRUB_DEFAULT=0
-#GRUB_TIMEOUT=5
+
+# seconds before GRUB boots the GRUB_DEFAULT entry
+# Arch Linux default: 5
 GRUB_TIMEOUT=0
+GRUB_TIMEOUT_STYLE=countdown
+
+# used to make entry names more descriptive
 GRUB_DISTRIBUTOR="Arch"
-GRUB_CMDLINE_LINUX_DEFAULT=""
+
+# kernel arguments to add to the Linux entries
 GRUB_CMDLINE_LINUX="net.ifnames=0"
 
-# Preload both GPT and MBR modules so that they are not missed
-# Preload lvm because os-prober won't work with Arch installs otherwise
-# Preload png to suppport background images
+# kernel arguments to add to only the default (non-recovery) Linux entries
+GRUB_CMDLINE_LINUX_DEFAULT=""
+
+# preload modules, so they are loaded before selecting an entry
+#   * GPT and MBR: so things work (???) TODO
+#   * LVM: why??? TODO
+#   * PNG: support background images
 GRUB_PRELOAD_MODULES="part_gpt part_msdos lvm png"
 
-# Uncomment to enable Hidden Menu, and optionally hide the timeout count
-#GRUB_HIDDEN_TIMEOUT=5
-#GRUB_HIDDEN_TIMEOUT_QUIET=true
-
-# Uncomment to use basic console
-GRUB_TERMINAL_INPUT=console
-
-
-# Uncomment to disable graphical terminal
-#GRUB_TERMINAL_OUTPUT=console
-
-# The resolution used on graphical terminal
+# The resolution used on graphical terminal (? TODO)
 # note that you can use only modes which your graphic card supports via VBE
 # you can see them in real GRUB with the command `vbeinfo' (in GRUB, ofc!)
 GRUB_GFXMODE=auto
 
-# Uncomment to allow the kernel use the same resolution used by grub
-GRUB_GFXPAYLOAD_LINUX=keep
-
-# Uncomment if you want GRUB to pass to the Linux kernel the old parameter 
-# format "root=/dev/xxx" instead of "root=/dev/disk/by-uuid/xxx" 
-#GRUB_DISABLE_LINUX_UUID=true
-
-# Uncomment to disable generation of recovery mode menu entries
+# don't generate recovery entries
 GRUB_DISABLE_RECOVERY=true
-
-# Uncomment and set to the desired menu colors.  Used by normal and wallpaper 
-# modes only.  Entries specified as foreground/background.
-#GRUB_COLOR_NORMAL="light-blue/black"
-#GRUB_COLOR_HIGHLIGHT="light-cyan/blue"
-
-# Uncomment one of them for the gfx desired, a image background or a gfxtheme
-#GRUB_BACKGROUND="/path/to/wallpaper"
-#GRUB_THEME="/path/to/gfxtheme"
-
-# Uncomment to get a beep at GRUB start
-#GRUB_INIT_TUNE="480 440 1"
-
-#GRUB_SAVEDEFAULT="true"
 
 # Show a custom background image
 # Grub requires that the extension matches the filetype, so I'm sticking
 # with png for now
 GRUB_BACKGROUND="/boot/grub/background-image.png"
+
+# Uncomment to allow the kernel use the same resolution used by grub (? TODO)
+#GRUB_GFXPAYLOAD_LINUX=keep
+
+# Uncomment to use basic console (? TODO)
+#GRUB_TERMINAL_INPUT=console
+# Uncomment to disable graphical terminal (? TODO)
+#GRUB_TERMINAL_OUTPUT=console
+
+# tune to play when GRUB starts (passed to the 'play' GRUB command)
+#GRUB_INIT_TUNE="480 440 1"
+
+# works with GRUB_DEFAULT=saved -- if true, any selected entry will become the
+# new default
+#GRUB_SAVEDEFAULT=true
